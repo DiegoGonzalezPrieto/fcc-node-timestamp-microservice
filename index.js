@@ -1,9 +1,7 @@
-// index.js
-// where your node app starts
-
 // init project
 var express = require('express');
 var app = express();
+var timeCheck = require('./timeCheck.js');
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -23,10 +21,19 @@ app.get("/", function (req, res) {
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
+// default timestamp (now)
+app.get('/api', (req, res)=>{
+	let resultDate = new Date();
+	res.json({
+		"unix": resultDate.getTime(),
+		"utc": resultDate.toUTCString()
+	})
+});
 
 // timestamp api
 app.get('/api/:date', (req, res)=>{
-  res.json({time: new Date(), yourTime: req.params.date})
+	let inputDate = req.params.date;
+	res.json(timeCheck(inputDate));
 })
 
 
